@@ -87,12 +87,27 @@ def encrypt():
     # print(evenWords)
 
 def decrypt():
-    pass
+    inputCipher = "tueoey!m doet!saelp im#a odlllreohw"
+
+    splitCipher = inputCipher.split()
+    oddWords = []
+    for word in reversed(splitCipher):
+        newOddWord, newEvenWord = "", ""
+        for i, char in enumerate(reversed(word)):
+            if i % 2 == 0:
+                newOddWord += char
+            else:
+                newEvenWord += char
+        print(newEvenWord, newOddWord)
+
+
+
 
 
 if __name__ == '__main__':
-    if input("encrypt or decrypt?") == "decrypt":
-        decrypt()
-    else:
-        encrypt()
+    # if input("encrypt or decrypt?") == "decrypt":
+    #     decrypt()
+    # else:
+    #     encrypt()
+    decrypt()
 
