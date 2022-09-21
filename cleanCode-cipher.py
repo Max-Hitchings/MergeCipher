@@ -1,3 +1,13 @@
+import string
+
+
+def takeInput():
+    sentence = input("Enter your sentence")
+    for char in string.punctuation:
+        sentence.replace(char, '')
+
+    return sentence
+
 def splitSentence(sentance):
     initalSplit = sentance.split()
     oddWords = []
@@ -9,20 +19,16 @@ def splitSentence(sentance):
         else:
             evenWords.append(initalSplit[i])
 
-    ### note to self - u are stupid :) ###
-    # for word in initalSplit:
-    #     if len(word) % 2 == 0:
-    #         evenWords.append(word)
-    #     else:
-    #         oddWords.append(word)
     return oddWords, evenWords
 
 def reverseAndJoinWords(odd, even):
     newWord = ""
+    oddL, evenL = len(odd), len(even)
+
     shorterWord = {
-        "word": odd if len(odd) < len(even) else even,
-        "type": "#" if len(odd) < len(even) else "!",
-        "longWord": even if len(odd) < len(even) else odd
+        "word": odd if oddL < evenL else even,
+        "type": "#" if oddL < evenL else "!",
+        "longWord": odd if oddL > evenL else even
     }
 
     for i in range(1, len(shorterWord["word"])+1):
@@ -30,6 +36,7 @@ def reverseAndJoinWords(odd, even):
         newWord += even[-i]
 
     newWord += shorterWord["type"] + shorterWord["longWord"][:-len(shorterWord["word"])][::-1]
+
     return newWord + " "
 
 
@@ -50,19 +57,23 @@ def combineLists(odd: list, even: list):
     cipher += extraWord[::-1]
     return cipher
 
+
 def encrypt(inputSentence):
     oddWords, evenWords = splitSentence(inputSentence)
     output = combineLists(oddWords, evenWords)
     return output
 
+
 def decrypt(inputCipher):
     splitCipher = inputCipher.split()
     plainText = ""
     extraWord = ""
-    if len(splitCipher) % 2 != 0:
+
+    if '!' not in splitCipher[-1] and '#' not in splitCipher[-1]:
         extraWord = splitCipher.pop(-1)
-        print(extraWord)
+
     for word in reversed(splitCipher):
+        # if
         newOddWord, newEvenWord = "", ""
         for i, char in enumerate(word):
             if char != "#" and char != "!":
@@ -84,11 +95,11 @@ def decrypt(inputCipher):
 
 
 if __name__ == '__main__':
-    userInput = "hello world i am pleased to meet you cooloooooooooo"
-    # userInput = "hello my name is max"
-    en = encrypt(userInput)
-    # BUG # Decrypt doesn't work for odd length sentences
-    de = decrypt(en)
+    while True:
+        if input("encrypt or decrypt? (e/d) ") == "d":
+            print(decrypt(takeInput()))
+        else:
+            print(encrypt(takeInput()))
 
-    print("cipher:", en)
-    print("plain text:", de)
+        if input("again? (y/n) ") == "n":
+            break
