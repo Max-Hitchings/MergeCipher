@@ -1,10 +1,8 @@
-import string
-
-
 def takeInput():
     sentence = input("Enter your sentence")
-    for char in string.punctuation:
+    for char in ["!#$%&'()*+, -./:;<=>?@[\]^_`{|}~"]:
         sentence.replace(char, '')
+    sentence.replace('"', '')
 
     return sentence
 
@@ -42,14 +40,15 @@ def reverseAndJoinWords(odd, even):
 
 def combineLists(odd: list, even: list):
     cipher = ""
-    shorterList = {
-        "list": odd if len(odd) < len(even) else even,
-        "type": "odd" if len(odd) < len(even) else "even"
-    }
+    # shorterList = {
+    #     "list": odd if len(odd) < len(even) else even,
+    #     "type": "odd" if len(odd) < len(even) else "even"
+    # }
     extraWord = ""
     if len(odd) > len(even):
         extraWord = (odd.pop(-1))
 
+    # loop through words to length of even because that will always be <= len of odd words
     for i in range(1, len(even) + 1):
         currentWords = (odd[-i], even[-i])
         cipher += reverseAndJoinWords(*currentWords)
@@ -65,10 +64,12 @@ def encrypt(inputSentence):
 
 
 def decrypt(inputCipher):
+    # split the cipher up into its two word blocks
     splitCipher = inputCipher.split()
     plainText = ""
     extraWord = ""
 
+    # checks for end of a word signaled by either ! or #
     if '!' not in splitCipher[-1] and '#' not in splitCipher[-1]:
         extraWord = splitCipher.pop(-1)
 
